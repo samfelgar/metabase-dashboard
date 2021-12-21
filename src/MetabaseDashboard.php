@@ -4,24 +4,24 @@ namespace Samfelgar\MetabaseDashboard;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\View\View;
-use Laravel\Nova\Metable;
 use Laravel\Nova\Nova;
 use Laravel\Nova\Tool;
 use Samfelgar\MetabaseDashboard\DataTransferObjects\Dashboard;
+use Samfelgar\MetabaseDashboard\Services\Iframe;
 
 class MetabaseDashboard extends Tool implements Arrayable
 {
-    use Metable;
-
     private string $label = 'Metabase Dashboard';
     private string $title = 'Metabase Dashboard';
+    private string $identifier;
 
     private Dashboard $dashboard;
 
-    public function __construct(Dashboard $dashboard)
+    public function __construct(string $identifier, Dashboard $dashboard)
     {
         parent::__construct();
 
+        $this->identifier = $identifier;
         $this->dashboard = $dashboard;
     }
 
@@ -36,7 +36,7 @@ class MetabaseDashboard extends Tool implements Arrayable
         Nova::style('metabase-dashboard', __DIR__ . '/../dist/css/tool.css');
 
         Nova::provideToScript([
-            'metabaseDashboard' => $this->toArray(),
+            $this->identifier => $this->toArray(),
         ]);
     }
 
@@ -49,6 +49,7 @@ class MetabaseDashboard extends Tool implements Arrayable
     {
         return view('metabase-dashboard::navigation', [
             'label' => $this->label,
+            'identifier' => $this->identifier,
         ]);
     }
 
