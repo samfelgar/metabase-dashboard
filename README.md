@@ -44,6 +44,8 @@ public function tools(): array
 }
 ```
 
+> **TIP:** You can instantiate more than one dashboard, just be sure to define a unique identifier for each of them.
+
 ## Contributing
 
 All contributions are welcome! Please open a PR.
