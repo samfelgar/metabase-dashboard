@@ -19,19 +19,36 @@ class Iframe
     public function getUrl(): string
     {
         $metabaseSiteUrl = $this->dashboard->getUrl();
-        $metabaseSecretKey = $this->dashboard->getKey();
 
-        $configuration = Configuration::forSymmetricSigner(
+        $token = $this->getToken();
+
+        return "{$metabaseSiteUrl}/embed/dashboard/{$token}#bordered=true&titled=false";
+    }
+
+    private function getJWTConfiguration(): Configuration
+    {
+        return Configuration::forSymmetricSigner(
             new Sha256(),
-            InMemory::base64Encoded($metabaseSecretKey)
+            InMemory::plainText($this->dashboard->getKey())
         );
+    }
 
-        $token = $configuration->builder()
-            ->withClaim('resource', $this->dashboard->getResource())
+    private function getToken(): string
+    {
+        $configuration = $this->getJWTConfiguration();
+
+        $referenceDate = now();
+        $expiresAt = $referenceDate->addMinutes(60);
+
+        return $configuration->builder()
+            ->withClaim('resource', [
+                'dashboard' => $this->dashboard->getResource()
+            ])
             ->withClaim('params', $this->dashboard->getParams())
-            ->getToken($configuration->signer(), $configuration->signingKey());
-
-        return "{$metabaseSiteUrl}/embed/dashboard/{$token->toString()}#bordered=true&titled=false";
+            ->issuedAt($referenceDate->toDateTimeImmutable())
+            ->expiresAt($expiresAt->toDateTimeImmutable())
+            ->getToken($configuration->signer(), $configuration->signingKey())
+            ->toString();
     }
 
 }
