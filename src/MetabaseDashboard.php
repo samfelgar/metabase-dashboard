@@ -72,6 +72,14 @@ class MetabaseDashboard extends Tool implements Arrayable
         return [
             'label' => $this->label,
             'title' => $this->title,
+            'url' => $this->iframeUrl(),
         ];
+    }
+
+    private function iframeUrl(): string
+    {
+        $iframe = new Iframe($this->dashboard);
+
+        return $iframe->getUrl();
     }
 }
