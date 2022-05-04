@@ -5,7 +5,7 @@ namespace Samfelgar\MetabaseDashboard\Services;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Key\InMemory;
-use Samfelgar\MetabaseDashboard\DataTransferObjects\Dashboard;
+use Samfelgar\MetabaseDashboard\Dashboard;
 
 class Iframe
 {
@@ -22,7 +22,7 @@ class Iframe
 
         $token = $this->getToken();
 
-        return "{$metabaseSiteUrl}/embed/dashboard/{$token}#bordered=true&titled=false";
+        return "{$metabaseSiteUrl}/embed/{$this->dashboard->getType()}/{$token}#bordered=true&titled=false";
     }
 
     private function getJWTConfiguration(): Configuration
@@ -42,7 +42,7 @@ class Iframe
 
         return $configuration->builder()
             ->withClaim('resource', [
-                'dashboard' => $this->dashboard->getResource()
+                $this->dashboard->getType() => $this->dashboard->getResource()
             ])
             ->withClaim('params', $this->dashboard->getParams())
             ->issuedAt($referenceDate->toDateTimeImmutable())
