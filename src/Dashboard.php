@@ -1,18 +1,28 @@
 <?php
 
-namespace Samfelgar\MetabaseDashboard\DataTransferObjects;
+namespace Samfelgar\MetabaseDashboard;
+
+use Laravel\Nova\AuthorizedToSee;
 
 class Dashboard
 {
+    use AuthorizedToSee;
+
     private string $url;
     private string $key;
+    private string $type;
+    private string $identifier;
+    private string $label;
     private int $resource;
     private array $params;
 
-    public function __construct(string $url, string $key, int $resource, array $params)
+    public function __construct(string $url, string $key, int $resource, array $params, string $type, string $identifier, string $label)
     {
         $this->url = $url;
         $this->key = $key;
+        $this->type = $type;
+        $this->identifier = $identifier;
+        $this->label = $label;
         $this->resource = $resource;
         $this->params = $params;
     }
@@ -25,6 +35,18 @@ class Dashboard
     public function getKey(): string
     {
         return $this->key;
+    }
+    public function getType(): string
+    {
+        return $this->type;
+    }
+    public function getIdentifier(): string
+    {
+        return $this->identifier;
+    }
+    public function getLabel(): string
+    {
+        return $this->label;
     }
 
     public function getResource(): int
