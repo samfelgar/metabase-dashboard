@@ -6,23 +6,20 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\View\View;
 use Laravel\Nova\Nova;
 use Laravel\Nova\Tool;
-use Samfelgar\MetabaseDashboard\DataTransferObjects\Dashboard;
 use Samfelgar\MetabaseDashboard\Services\Iframe;
 
 class MetabaseDashboard extends Tool implements Arrayable
 {
     private string $label = 'Metabase Dashboard';
     private string $title = 'Metabase Dashboard';
-    private string $identifier;
 
-    private Dashboard $dashboard;
+    private array $dashboard;
 
-    public function __construct(string $identifier, Dashboard $dashboard)
+    public function __construct(array $dashboard)
     {
         parent::__construct();
 
-        $this->identifier = $identifier;
-        $this->dashboard = $dashboard;
+        $this->dashboard = array_filter($dashboard, fn($dash) => $dash->authorizedToSee(request()));
     }
 
     /**
@@ -35,9 +32,11 @@ class MetabaseDashboard extends Tool implements Arrayable
         Nova::script('metabase-dashboard', __DIR__ . '/../dist/js/tool.js');
         Nova::style('metabase-dashboard', __DIR__ . '/../dist/css/tool.css');
 
-        Nova::provideToScript([
-            $this->identifier => $this->toArray(),
-        ]);
+        foreach ($this->toArray() as $data){
+            Nova::provideToScript([
+                $data["identifier"] => $data
+            ]);
+        }
     }
 
     /**
@@ -49,7 +48,7 @@ class MetabaseDashboard extends Tool implements Arrayable
     {
         return view('metabase-dashboard::navigation', [
             'label' => $this->label,
-            'identifier' => $this->identifier,
+            'dashboards' => $this->dashboard
         ]);
     }
 
@@ -69,16 +68,21 @@ class MetabaseDashboard extends Tool implements Arrayable
 
     public function toArray(): array
     {
-        return [
-            'label' => $this->label,
-            'title' => $this->title,
-            'url' => $this->iframeUrl(),
-        ];
+        $data = [];
+        foreach ($this->dashboard as $dash){
+            $data[] = [
+                'label' => $dash->getLabel(),
+                'title' => $this->title,
+                'url' => $this->iframeUrl($dash),
+                'identifier' => $dash->getIdentifier()
+            ];
+        }
+        return $data;
     }
 
-    private function iframeUrl(): string
+    private function iframeUrl(Dashboard $dashboard): string
     {
-        $iframe = new Iframe($this->dashboard);
+        $iframe = new Iframe($dashboard);
 
         return $iframe->getUrl();
     }
