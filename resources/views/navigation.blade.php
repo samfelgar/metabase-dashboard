@@ -8,12 +8,12 @@
         {{ $label }}
 </span>
 </div>
-@foreach($dashboards as $dash)
-<router-link tag="h3"
-             :to="{name: 'metabase-dashboard', params: {identifier: '{{ $dash->getIdentifier() }}' }}"
-             class="cursor-pointer ml-8 mb-4 text-xs text-white-50% uppercase">
+@foreach($dashboards as $dashboard)
+    <router-link tag="h3"
+                 :to="{name: 'metabase-dashboard', params: {identifier: '{{ $dashboard->getIdentifier() }}' }}"
+                 class="cursor-pointer ml-8 mb-4 text-xs text-white-50% uppercase">
     <span class="sidebar-label">
-        {{ $dash->getLabel() }}
+        {{ $dashboard->getLabel() }}
     </span>
-</router-link>
+    </router-link>
 @endforeach
