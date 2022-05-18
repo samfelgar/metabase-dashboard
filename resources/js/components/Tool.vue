@@ -14,10 +14,16 @@ export default {
 
   computed: {
     url() {
+      if (typeof Nova.config[this.identifier] === 'undefined'){
+        this.$router.push('/403')
+      }
       return Nova.config[this.identifier].url;
     },
 
     title() {
+      if (typeof Nova.config[this.identifier] === 'undefined'){
+        this.$router.push('/403')
+      }
       return Nova.config[this.identifier].title;
     },
   },
