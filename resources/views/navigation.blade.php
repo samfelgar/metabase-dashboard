@@ -1,4 +1,4 @@
-@if($dashboards)
+@if($dashboards !== [])
     <div class="flex items-center font-normal dim text-white mb-6 text-base no-underline">
         <svg class="sidebar-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22">
             <path fill="var(--sidebar-icon)"
