@@ -39,13 +39,12 @@ class MetabaseDashboard extends Tool implements Arrayable
         Nova::script('metabase-dashboard', __DIR__ . '/../dist/js/tool.js');
         Nova::style('metabase-dashboard', __DIR__ . '/../dist/css/tool.css');
 
-        foreach ($this->toArray() as $dashboardInfo) {
+        foreach ($this->toArray() as $data){
             Nova::provideToScript([
-                $dashboardInfo['identifier'] => $dashboardInfo
+                $data["identifier"] => $data
             ]);
         }
     }
-
 
     /**
      * Build the menu that renders the navigation links for the tool.

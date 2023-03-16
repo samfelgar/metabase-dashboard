@@ -16,7 +16,15 @@ class Dashboard
     private int $resource;
     private array $params;
 
-    public function __construct(string $url, string $key, int $resource, array $params, string $type, string $identifier, string $label)
+    public function __construct(
+        string $url,
+        string $key,
+        int $resource,
+        array $params,
+        string $type,
+        string $identifier,
+        string $label
+    )
     {
         $this->url = $url;
         $this->key = $key;
@@ -36,14 +44,17 @@ class Dashboard
     {
         return $this->key;
     }
+
     public function getType(): string
     {
         return $this->type;
     }
+
     public function getIdentifier(): string
     {
         return $this->identifier;
     }
+
     public function getLabel(): string
     {
         return $this->label;
