@@ -2,7 +2,6 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Mlearnbr\KpiDashboard\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,4 +14,3 @@ use Mlearnbr\KpiDashboard\Http\Controllers\DashboardController;
 |
 */
 
-Route::get('/', [DashboardController::class, 'getIframeUrl']);
