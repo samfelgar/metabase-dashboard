@@ -14,22 +14,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['identifier'],
-  mounted: function mounted() {
-    console.log(this);
-    console.log(Nova.appConfig);
-  },
   computed: {
     url: function url() {
-      console.log(this);
-      console.log(Nova.appConfig);
       if (typeof Nova.appConfig[this.identifier] === 'undefined') {
-        // window.location.href = '/app/403';
+        Nova.visit('/403');
       }
       return Nova.appConfig[this.identifier].url;
     },
     title: function title() {
       if (typeof Nova.appConfig[this.identifier] === 'undefined') {
-        // window.location.href = '/app/403';
+        Nova.visit('/403');
       }
       return Nova.appConfig[this.identifier].title;
     }

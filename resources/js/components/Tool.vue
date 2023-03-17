@@ -14,17 +14,15 @@ export default {
 
   computed: {
     url() {
-      console.log(this)
-      console.log(Nova.appConfig)
       if (typeof Nova.appConfig[this.identifier] === 'undefined') {
-        window.location.href = '/app/403';
+        Nova.visit('/403');
       }
       return Nova.appConfig[this.identifier].url;
     },
 
     title() {
       if (typeof Nova.appConfig[this.identifier] === 'undefined') {
-        window.location.href = '/app/403';
+        Nova.visit('/403');
       }
       return Nova.appConfig[this.identifier].title;
     },
