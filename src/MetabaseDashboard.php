@@ -56,7 +56,7 @@ class MetabaseDashboard extends Tool implements Arrayable
     {
         return MenuSection::make(__('Statistics'), $this->subMenus())
             ->collapsable()
-            ->icon('server');
+            ->icon('chart-bar');
     }
 
     public function label(string $label): MetabaseDashboard
