@@ -25,7 +25,7 @@ __webpack_require__.r(__webpack_exports__);
       if (typeof Nova.appConfig[this.identifier] === 'undefined') {
         Nova.visit('/403');
       }
-      return Nova.appConfig[this.identifier].title;
+      return Nova.appConfig[this.identifier].label;
     }
   }
 });
