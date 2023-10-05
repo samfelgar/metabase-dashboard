@@ -14,17 +14,17 @@ export default {
 
   computed: {
     url() {
-      if (typeof Nova.config[this.identifier] === 'undefined'){
-        this.$router.push('/403')
+      if (typeof Nova.appConfig[this.identifier] === 'undefined') {
+        Nova.visit('/403');
       }
-      return Nova.config[this.identifier].url;
+      return Nova.appConfig[this.identifier].url;
     },
 
     title() {
-      if (typeof Nova.config[this.identifier] === 'undefined'){
-        this.$router.push('/403')
+      if (typeof Nova.appConfig[this.identifier] === 'undefined') {
+        Nova.visit('/403');
       }
-      return Nova.config[this.identifier].title;
+      return Nova.appConfig[this.identifier].label;
     },
   },
 }

@@ -39,9 +39,8 @@ class ToolServiceProvider extends ServiceProvider
             return;
         }
 
-        Route::middleware(['nova', Authorize::class])
-            ->prefix('nova-vendor/metabase-dashboard')
-            ->group(__DIR__ . '/../routes/api.php');
+        Nova::router(['nova', Authorize::class], 'metabase-dashboard')
+            ->group(__DIR__.'/../routes/inertia.php');
     }
 
     /**

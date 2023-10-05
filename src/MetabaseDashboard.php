@@ -3,7 +3,10 @@
 namespace Samfelgar\MetabaseDashboard;
 
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Laravel\Nova\Menu\MenuItem;
+use Laravel\Nova\Menu\MenuSection;
 use Laravel\Nova\Nova;
 use Laravel\Nova\Tool;
 use Samfelgar\MetabaseDashboard\Services\Iframe;
@@ -36,24 +39,24 @@ class MetabaseDashboard extends Tool implements Arrayable
         Nova::script('metabase-dashboard', __DIR__ . '/../dist/js/tool.js');
         Nova::style('metabase-dashboard', __DIR__ . '/../dist/css/tool.css');
 
-        foreach ($this->toArray() as $dashboardInfo){
+        foreach ($this->toArray() as $data){
             Nova::provideToScript([
-                $dashboardInfo['identifier'] => $dashboardInfo
+                $data["identifier"] => $data
             ]);
         }
     }
 
     /**
-     * Build the view that renders the navigation links for the tool.
+     * Build the menu that renders the navigation links for the tool.
      *
-     * @return View
+     * @param \Illuminate\Http\Request $request
+     * @return mixed
      */
-    public function renderNavigation(): View
+    public function menu(Request $request)
     {
-        return view('metabase-dashboard::navigation', [
-            'label' => $this->label,
-            'dashboards' => $this->dashboards
-        ]);
+        return MenuSection::make(__('Statistics'), $this->subMenus())
+            ->collapsable()
+            ->icon('chart-bar');
     }
 
     public function label(string $label): MetabaseDashboard
@@ -79,6 +82,14 @@ class MetabaseDashboard extends Tool implements Arrayable
                 'url' => $this->iframeUrl($dashboard),
                 'identifier' => $dashboard->getIdentifier()
             ];
+        }, $this->dashboards);
+    }
+
+    public function subMenus(): array
+    {
+        return array_map(function (Dashboard $dashboard) {
+            return MenuItem::make($dashboard->getLabel(), $dashboard)
+                ->path('/metabase-dashboard/'  . $dashboard->getIdentifier());
         }, $this->dashboards);
     }
 
